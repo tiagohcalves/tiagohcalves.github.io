@@ -1,0 +1,309 @@
+<?php
+	include 'dbdata.php';
+	
+	session_start();
+	if(!isset($_SESSION["logado"]) || $_SESSION["logado"] != 1){
+		header('Location: http://tiagohca.com/musica/login.php');
+	}
+?>
+
+<!DOCTYPE html>
+<html lang="pt" ng-app="musica">
+
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>Qual é a música</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="css/styles.css" rel="stylesheet">
+	</head>
+	<body ng-controller="mainCtrl">
+		<div style="padding-top: 20px">
+			<?
+				// connecting to db
+				$db = new mysqli($servername, $username, $password, $dbname);
+				$db->set_charset("utf8");
+				if ($db->connect_error) {
+					echo("Connection failed: " . $db->connect_error);
+				} 
+				
+				$sql = "SELECT * FROM m_Palavra";
+				if(!$resultComplete = $db->query($sql)){
+					echo('There was an error running the query [' . $db->error . ']');
+				}	
+				while($row = $resultComplete->fetch_array()){ 
+					$palavra[] = $row;
+				}
+
+				$sql = "SELECT * FROM m_CompleteACancao";
+				if(!$resultComplete = $db->query($sql)){
+					echo('There was an error running the query [' . $db->error . ']');
+				}	
+				while($row = $resultComplete->fetch_array()){ 
+					$complete[] = $row;
+				}
+				
+				$sql = "SELECT * FROM m_AdivinhaQuem";
+				if(!$resultComplete = $db->query($sql)){
+					echo('There was an error running the query [' . $db->error . ']');
+				}	
+				while($row = $resultComplete->fetch_array()){ 
+					$adivinha[] = $row;
+				}
+				
+				$sql = "SELECT * FROM m_Mimica";
+				if(!$resultComplete = $db->query($sql)){
+					echo('There was an error running the query [' . $db->error . ']');
+				}	
+				while($row = $resultComplete->fetch_array()){ 
+					$mimica[] = $row;
+				}
+			?>
+
+			<div class="container">
+				<div class="well">
+					<div class="row-fluid">
+						<div class="table-responsive">
+							<table class="table table-bordered {{cardClass}}">
+								<thead>
+									<tr class="{{cardClass}}">
+										<th>Nota</th>
+										<th>{{header}}</th>
+										<th ng-show="hasHiddenAnswers">{{headerAnswer}}</th>
+									</tr>
+								</thead>
+								<tbody>
+									 <tr ng-repeat="question in questions" class="{{cardClass}}">
+						                  <td class="col col-20">{{question.note}}</td>
+						                  <td class="col" style="white-space:pre-wrap;">{{question.name}}</td>
+						                  <td class="col" ng-show="showingAnswers">{{question.answer}}</td>
+						              </tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="row" ng-show="hasHiddenAnswers">
+							<button class="btn btn-block btn-lg" ng-click="showAnswers();">Mostrar Respostas</button>
+						</div>
+					</div>
+				</div>
+				
+				<div class="well" style="text-align: center;">
+					<a class="btn btn-default" ng-click="minusMinute()">-</a>
+					<span style="font-weight: bold; font-size: 20px;">{{timeCounter | secondsToDateTime | date:'mm:ss'}}</span>
+					<a class="btn btn-default" ng-click="plusMinute()">+</a>
+					<a class="btn btn-default" ng-click="startTimer()">GO!</a>
+					<a class="btn btn-default" ng-click="stopTimer()">Parar</a>
+				</div>
+				
+				<div class="well">
+					<div class="row">
+						<a class="btn btn-danger btn-block btn-lg" ng-click="loadPalavra()"> A palavra é...</a>
+						<br>
+						<a class="btn btn-success btn-block btn-lg" ng-click="loadComplete()">Complete a canção</a>
+						<br>
+						<a class="btn btn-warning btn-block btn-lg" ng-click="loadAdivinha()">Adivinha Quem</a>
+						<br>
+						<a class="btn btn-primary btn-block btn-lg" ng-click="loadMimica()">Pagando Mímica</a>
+					</div>
+				</div>
+
+				<div class="well">
+					<div ng-repeat="team in teams">
+				        <div class="row">
+				            <div>
+				              Time {{$index + 1}}
+				              <a ng-click="remove(team)">&times</a>
+				            </div>
+				        </div>
+				        <div class="row checkbox">
+				            <label class="checkbox-inline" ng-repeat="note in notes">
+			              		<input type="checkbox">{{note}}
+				            </label>
+				    	</div>
+				    </div>
+				    <div>
+				        <button class="button button-balanced button-full" ng-click="addTeam()">Adicionar time</button>
+				    </div>
+			    </div>
+			</div>
+		</div>
+		
+		<!-- script references -->
+		<script src="js/jquery-1.11.3.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+		<script>
+			angular.module('musica', []).controller('mainCtrl', ['$scope', '$interval', function($scope, $interval){
+				var palavra = <? echo json_encode($palavra) ?>;
+				var complete = <? echo json_encode($complete) ?>;
+				var adivinha = <? echo json_encode($adivinha) ?>;
+				var mimica = <? echo json_encode($mimica) ?>;
+				
+				$scope.timeCounter = 3 * 60;
+				$scope.showingAnswers = false;
+  				$scope.notes = ["Dó","Ré", "Mi", "Fá", "Sol", "Lá", "Si"];
+
+				var stop = true;
+				var answering = false;
+				var defaultTime = $scope.timeCounter;
+				
+				$scope.showAnswers = function(){
+					$scope.showingAnswers = true;
+				}
+				
+				$scope.loadPalavra = function(){
+			      $scope.cardClass = "danger";
+			      $scope.hasHiddenAnswers = false;
+			      $scope.showingAnswers = false;
+			      $scope.header = "Palavra";
+
+			      $scope.questions = [];
+
+			      for(var i = 0; i < 7; i++){
+			        var palavraRow = palavra[Math.floor(Math.random()*palavra.length)];
+			        $scope.questions.push({
+			            note: $scope.notes[i],
+			            name: palavraRow.palavra
+			        });
+			      }
+			      
+			      $scope.resetTimer();
+			    }
+			    
+			    $scope.loadComplete = function(){
+			      $scope.cardClass = "success";
+			      $scope.hasHiddenAnswers = true;
+			      $scope.showingAnswers = false;
+			      $scope.header = "Música";
+			      $scope.headerAnswer = "Resposta";
+
+			      $scope.questions = [];
+
+			      for(var i = 0; i < 7; i++){
+			        var completeRow = complete[Math.floor(Math.random()*complete.length)];
+			        $scope.questions.push({
+			            note: $scope.notes[i],
+			            name: completeRow.inicio,
+			            answer: completeRow.resposta
+			        });
+			      }
+			      
+			      $scope.resetTimer();
+			    }
+			    
+			    $scope.loadAdivinha = function(){
+			      $scope.cardClass = "warning";
+			      $scope.hasHiddenAnswers = true;
+			      $scope.showingAnswers = false;
+			      $scope.header = "Trecho";
+			      $scope.headerAnswer = "Artista";
+
+			      $scope.questions = [];
+			      for(var i = 0; i < 7; i++){
+			        var adivinhaRow = adivinha[Math.floor(Math.random()*adivinha.length)];
+			        $scope.questions.push({
+			            note: $scope.notes[i],
+			            name: adivinhaRow.verse,
+			            answer: adivinhaRow.artist
+			        });
+			      }
+
+			      $scope.resetTimer();
+			    }
+			    
+			    $scope.loadMimica = function(){
+			      $scope.cardClass = "info";
+			      $scope.hasHiddenAnswers = true;
+			      $scope.showingAnswers = true;
+			      $scope.header = "Música";
+			      $scope.headerAnswer = "Artista";
+
+			      $scope.questions = [];
+			      for(var i = 0; i < 7; i++){
+			        var mimicaRow = mimica[Math.floor(Math.random()*mimica.length)];
+			        var adivinhaRow = adivinha[Math.floor(Math.random()*adivinha.length)];
+			        $scope.questions.push({
+			            note: $scope.notes[i],
+			            name: mimicaRow.title,
+			            answer: mimicaRow.artist
+
+			        });
+			      }
+			      
+			      $scope.resetTimer();
+			    }
+				
+				$scope.startTimer = function() {
+					if(!answering){
+						var timer = $scope.timeCounter, minutes, seconds;
+						answering = true;
+						stop = false;
+
+						var timerInterval = $interval(function () {
+							if (stop || (--timer < 0)) {
+								answering = false;
+								stop = false;
+
+								if(angular.isDefined(timerInterval)){
+									$interval.cancel(timerInterval);
+									timerInterval = undefined;
+								}
+								
+								return;
+							}
+							
+							$scope.timeCounter = timer;
+						}, 1000);
+					}
+				}
+				
+				$scope.resetTimer = function(){
+					answering = false;
+					stop = true;
+					$scope.timeCounter = defaultTime;
+				}
+				
+				$scope.minusMinute = function(){
+					if(!answering && $scope.timeCounter > 0){
+						defaultTime = $scope.timeCounter -= 30;
+					}
+				}
+				
+				$scope.plusMinute = function(){
+					if(!answering){
+						defaultTime = $scope.timeCounter += 30;
+					}
+				}
+				
+				$scope.stopTimer = function(){
+					stop = true;
+				}
+
+				$scope.loadPalavra();
+
+
+				/* Teams */
+				$scope.teams = [1, 2];
+				
+				$scope.addTeam = function(){
+					var newTeam = $scope.teams.length + 1;
+					$scope.teams.push(newTeam);
+				}
+
+				$scope.remove = function(team) {
+					$scope.teams.splice($scope.teams.indexOf(team), 1);
+				};
+
+			}]).filter('secondsToDateTime', [function() {
+			    return function(seconds) {
+			        return new Date(1970, 0, 1).setSeconds(seconds);
+			    };
+			}]);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>A Song of Ice and Fire and Visualization</title>
+  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+  <link href="style.css" rel="stylesheet" type="text/css">
+
+  <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-54972512-1', 'auto');
+          ga('send', 'pageview');
+    </script>
+</head>
+<body>
+
+<div id="logo">
+   <img id="title" src="logo.png" alt="Game of Thrones" height="100px"></img>
+   <span id="sub-title">A Song of Ice and Fire and Visualization - by Tiago Alves<span>
+</div>
+
+<div id="battle-graph">
+  <h1>The Battle of The Five Kings</h1>
+  <h2 class="muted"><span class="king-name">Select a king</span> <a class="clear" onclick="clearSelectedKing()">×</a></h2> 
+</div>
+
+
+<div id="battle-army">
+  <h1>The Greatests Battles of Westeros</h1>
+  <div>Sort by: 
+  <select>
+    <option value="battle">Battle</option>
+    <option value="attacker">Attacker Size</option>
+    <option value="defender">Deffender Size</option>
+    <option value="both">Attacker + Deffender Size</option>
+  </select>
+  </div>
+</div>
+
+<div class="clear-line"></div>
+
+<div id="char-wheel">
+  <h1>THE Wheel of Thrones</h1>
+</div>
+
+<div id="char-info">
+  <h2 class="char-name"></h2>
+  <h2 class="char-gender"></h2>
+  <h2 class="char-nobility"></h2>
+  <h2 class="char-alive"></h2>
+</div>
+
+
+<script src="d3/d3.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+<script>
+  var selectedKing = "";
+  var updateSelectedKing;
+  var clearSelectedKing = function(){
+    selectedKing = "";
+    updateSelectedKing();
+    d3.select(".king-name").text("Select a king");
+    d3.select(".clear").style("display", "none");
+  }
+
+  d3.select(".clear").style("display", "none");
+</script>
+
+<script src="grafo-batalhas/data.js"></script>
+<script src="grafo-batalhas/battle-graph.js"></script>
+
+<script src="data/char.js"></script>
+<script src="roda-personagens/char-wheel.js"></script>
+
+<script src="data/battle.js"></script>
+<script src="batalhas-exercitos/battle_army.js"></script>
+
+</body>
+</html>

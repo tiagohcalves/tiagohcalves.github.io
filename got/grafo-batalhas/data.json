@@ -1,0 +1,43 @@
+var data = 
+{
+  "nodes":[
+    {"name":"Joffrey/Tommen Baratheon","group":1},
+    {"name":"Robb Stark","group":2},
+    {"name":"Balon/Euron Greyjoy","group":3},
+    {"name":"Stannis Baratheon","group":4},
+    {"name":"Renly Baratheon","group":5},
+    {"name":"Mance Rayder","group":6}
+  ],
+  "links":[
+    {"source":0,"target":1,"value":1},
+    {"source":0,"target":1,"value":2},
+    {"source":0,"target":1,"value":1},
+    {"source":1,"target":0,"value":1},
+    {"source":1,"target":0,"value":2},
+    {"source":1,"target":0,"value":2},
+    {"source":0,"target":1,"value":1},
+    {"source":2,"target":1,"value":1},
+    {"source":2,"target":1,"value":3},
+    {"source":2,"target":1,"value":2},
+    {"source":1,"target":2,"value":1},
+    {"source":2,"target":1,"value":2},
+    {"source":2,"target":2,"value":3},
+    {"source":0,"target":1,"value":2},
+    {"source":1,"target":0,"value":2},
+    {"source":3,"target":4,"value":3},
+    {"source":0,"target":1,"value":1},
+    {"source":1,"target":0,"value":2},
+    {"source":3,"target":0,"value":1},
+    {"source":1,"target":0,"value":3},
+    {"source":1,"target":0,"value":1},
+    {"source":3,"target":5,"value":3},
+    {"source":0,"target":2,"value":3},
+    {"source":3,"target":2,"value":3},
+    {"source":2,"target":0,"value":1},
+    {"source":2,"target":0,"value":4},
+    {"source":0,"target":2,"value":3},
+    {"source":0,"target":2,"value":3},
+    {"source":0,"target":1,"value":3},
+    {"source":3,"target":0,"value":3},
+  ]
+}
