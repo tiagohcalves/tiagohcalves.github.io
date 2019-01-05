@@ -30,8 +30,8 @@
 								<tbody>
 									 <tr ng-repeat="question in questions" class="{{cardClass}}">
 						                  <td class="col col-20">{{question.note}}</td>
-						                  <td class="col" style="white-space:pre-wrap;">{{question.name}}</td>
-						                  <td class="col" ng-show="showingAnswers">{{question.answer}}</td>
+						                  <td class="col" style="white-space:pre-wrap;"><i>{{question.name}}</i></td>
+						                  <td class="col" style="white-space:pre-wrap;" ng-show="showingAnswers"><i>{{question.answer}}</i></td>
 						              </tr>
 								</tbody>
 							</table>
@@ -46,7 +46,7 @@
 					<a class="btn btn-default" ng-click="minusMinute()">-</a>
 					<span style="font-weight: bold; font-size: 20px;">{{timeCounter | secondsToDateTime | date:'mm:ss'}}</span>
 					<a class="btn btn-default" ng-click="plusMinute()">+</a>
-					<a class="btn btn-default" ng-click="startTimer()">GO!</a>
+					<a class="btn btn-default" ng-click="startTimer()">Valendo!</a>
 					<a class="btn btn-default" ng-click="stopTimer()">Parar</a>
 				</div>
 				
@@ -63,7 +63,8 @@
 				</div>
 
 				<div class="well">
-					<div ng-repeat="team in teams">
+					<div ng-repeat="team in teams" class="well well-sm">
+						<center>
 				        <div class="row">
 				            <div>
 				              Time {{$index + 1}}
@@ -75,9 +76,10 @@
 			              		<input type="checkbox">{{note}}
 				            </label>
 				    	</div>
+				    	</center>
 				    </div>
 				    <div>
-				        <button class="button button-balanced button-full" ng-click="addTeam()">Adicionar time</button>
+				        <button class="btn button button-balanced button-full" ng-click="addTeam()">Adicionar time</button>
 				    </div>
 			    </div>
 			</div>
@@ -89,8 +91,12 @@
 		<script src="js/data.js"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
 		<script>
+			function capitalizeFirstLetter(string) {
+			    return string.charAt(0).toUpperCase() + string.slice(1);
+			}
+
 			angular.module('musica', []).controller('mainCtrl', ['$scope', '$interval', function($scope, $interval){
-				$scope.timeCounter = 3 * 60;
+				$scope.timeCounter = 1.5 * 60;
 				$scope.showingAnswers = false;
   				$scope.notes = ["Dó","Ré", "Mi", "Fá", "Sol", "Lá", "Si"];
 
@@ -114,7 +120,7 @@
 			        var palavraRow = palavra[Math.floor(Math.random()*palavra.length)];
 			        $scope.questions.push({
 			            note: $scope.notes[i],
-			            name: palavraRow.palavra
+			            name: capitalizeFirstLetter(palavraRow.palavra.toLowerCase().replace(/[!,?."\(\)]/gi, ''))
 			        });
 			      }
 			      
@@ -155,7 +161,7 @@
 			        $scope.questions.push({
 			            note: $scope.notes[i],
 			            name: adivinhaRow.verse,
-			            answer: adivinhaRow.artist
+			            answer: adivinhaRow.artist.replace(/-/gi, '\n')
 			        });
 			      }
 
