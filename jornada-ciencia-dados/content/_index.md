@@ -2,14 +2,12 @@
 title: "A Jornada para a Ciência de Dados"
 subtitle: "Um curso básico e completamente grauito para geeks (e outras pessoas)"
 date: 2020-04-29T07:22:28-03:00
-draft: true
 ---
 
-<!-- # A Jornada para a Ciência de Dados
-Um curso básico e completamente grauito para geeks (e outras pessoas) -->
+# A Jornada para a Ciência de Dados
+*Um curso básico e completamente grauito para geeks (e outras pessoas)*
 
-![Cover image](/static/img/index.jpg)
-Imagem original de [Wallpaper Tag](https://wallpapertag.com/epic-fantasy-wallpapers)
+![Cover image](/img/index.jpg)
 
 ## Ementa
 ### Introdução
