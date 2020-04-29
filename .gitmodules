@@ -1,0 +1,3 @@
+[submodule "jornada-ciencia-dados/themes/axiom"]
+	path = jornada-ciencia-dados/themes/axiom
+	url = https://github.com/marketempower/axiom.git
