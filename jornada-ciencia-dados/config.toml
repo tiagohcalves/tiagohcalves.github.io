@@ -1,4 +1,4 @@
 baseURL = "http://tiagohca.com/jornada-ciencia-dados"
 languageCode = "pt-br"
 title = "A Jornada para a Ciência de Dados"
-theme = "axiom"
+theme = "hugo-theme-anubis"
