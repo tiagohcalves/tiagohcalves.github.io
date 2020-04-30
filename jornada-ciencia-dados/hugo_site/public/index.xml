@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A Jornada para a Ciência de Dados</title>
+    <link>https://tiagohca.com/</link>
+    <description>A Jornada para a Ciência de Dados</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>pt-br</language>
+    <lastBuildDate>Wed, 29 Apr 2020 07:22:28 -0300</lastBuildDate>
+    
+    <atom:link href="https://tiagohca.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>01 Antes De Comecar</title>
+      <link>https://tiagohca.com/posts/01-antes-de-comecar/</link>
+      <pubDate>Wed, 29 Apr 2020 07:22:28 -0300</pubDate>
+      
+      <guid>https://tiagohca.com/posts/01-antes-de-comecar/</guid>
+      <description>&lt;h1 id=&#34;a-jornada-para-a-ciência-de-dados&#34;&gt;A Jornada para a Ciência de Dados&lt;/h1&gt;
+&lt;p&gt;Um curso básico e completamente grauito para geeks (e outras pessoas)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://tiagohca.com/img/index.jpg&#34; alt=&#34;Cover image&#34;&gt;
+Imagem original de &lt;a href=&#34;https://wallpapertag.com/epic-fantasy-wallpapers&#34;&gt;Wallpaper Tag&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ementa&#34;&gt;Ementa&lt;/h2&gt;
+&lt;h3 id=&#34;introdução&#34;&gt;Introdução&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Antes de começarmos&amp;hellip;  &lt;!-- raw HTML omitted --&gt;&lt;/li&gt;
+&lt;li&gt;Configurando o ambiente&lt;/li&gt;
+&lt;li&gt;Um básico sobre python&lt;/li&gt;
+&lt;li&gt;Bibliotecas e outras ferramentas úteis&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;se-tornando-um-mestre-pokémon&#34;&gt;Se tornando um mestre Pokémon&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Completando o Pokedex - Um tutorial sobre como obter dados &lt;!-- raw HTML omitted --&gt;&lt;/li&gt;
+&lt;li&gt;Como saber tudo o que há sobre os Pokémon - A análise exploratória &lt;!-- raw HTML omitted --&gt;&lt;/li&gt;
+&lt;li&gt;Descrevendo os Pokémon - Como funciona a engenharia de features&lt;/li&gt;
+&lt;li&gt;Lendário ou não? - Um primeiro modelo de classificação&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
