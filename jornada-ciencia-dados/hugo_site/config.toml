@@ -1,0 +1,4 @@
+baseURL = "https://tiagohca.com/"
+languageCode = "pt-br"
+title = "A Jornada para a Ciência de Dados"
+theme = "hugo-theme-anubis"

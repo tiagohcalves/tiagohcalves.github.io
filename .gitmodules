@@ -1,0 +1,3 @@
+[submodule "jornada-ciencia-dados/themes/hugo-theme-anubis"]
+	path = jornada-ciencia-dados/themes/hugo-theme-anubis
+	url = https://github.com/Mitrichius/hugo-theme-anubis.git
