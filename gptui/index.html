@@ -10,7 +10,7 @@ body  { font-family: Roboto,Lato,Arial; line-height:1.5; font-size:16px; margin:
 header { background: black; }
 header { color:#eee; padding:12px; font-size:20px; height:45px; font-family:"Open Sans" }
 #left  { float:left;  width:calc(60vw - 30px); height:calc(100vh - 100px); }
-#right { float:right; width:40%; height:calc(100vh - 100px); } 
+#right { float:right; width:40%; height:calc(100vh - 200px); } 
 #left, #prompt, #list { border:1px solid grey; padding:6px; overflow:auto }
 #list li:hover  { background:#ddd }
 #menu button    { font-family:Lato,arial; border-radius:3px; border:none; padding:3px 6px}
@@ -38,7 +38,7 @@ header { color:#eee; padding:12px; font-size:20px; height:45px; font-family:"Ope
   #right { position:absolute; width:auto; height:auto; bottom:10px; left:8px; right:70px }
   #right textarea { height:1.2em; padding:10px; overflow:auto }
   #btnSend { position:absolute; height:36px; bottom:12px; right:12px; }
-  #left	 { width:97%; height:calc(100vh - 154px);  }
+  #left	 { width:97%; height:calc(100vh - 200px);  }
 }
 </style>
 
@@ -56,6 +56,7 @@ header { color:#eee; padding:12px; font-size:20px; height:45px; font-family:"Ope
 
 <div id="content" style="margin:8px;color:#112;background:bed">
   <div id="right">
+     <textarea id=context rows=1 placeholder="add context here"></textarea>
      <textarea id=prompt rows=3 placeholder="please input prompt here.."></textarea>
   </div>
   <div id="left">
@@ -64,6 +65,9 @@ header { color:#eee; padding:12px; font-size:20px; height:45px; font-family:"Ope
       <button id="saveKey" onclick="chat.save()" title="save" type="submit">Save</button><br>
     </form>
     <input type="checkbox" id="jbCbx">Jailbreak?</button>
+    <br>
+    <textarea id=prefix rows=3 placeholder="add message prefix here"></textarea>
+
     <div id="main" style="padding:12px; max-width:960px">
        <h3>Welcome to vanilla-chatgpt.</h3>
        <br>
@@ -239,12 +243,22 @@ chat.stream = function (prompt) {
   chat.body.stream = true 
   chat.body.n = 1
   chat.body.max_tokens = 1024
-  chat.body.messages = [ { role: "user", content: prompt} ]
   chat.headers = { "Authorization": `Bearer ${chat("apiKey").value}`, "Content-Type": "application/json" }
   chat.result = ''
   chat.controller = new AbortController();
   const signal = chat.controller.signal
+
+  message = prompt
+
+  if ( chat('prefix').value ) {
+     message = chat('prefix').value + "\n" + message
+  }
+
+  if ( chat('context').value ) {
+     message = "Consider the following context: " + chat('context').value + "\n" + message
+  }
    
+  chat.body.messages = [ { role: "user", content: message} ]
   for (let i=chat.history.length-1; i>=0&&i>(chat.history.length-3); i--) {
     chat.body.messages.unshift( { role:'assistant', content: chat.history[i].result } );
     chat.body.messages.unshift( { role:'user', content: chat.history[i].prompt } );
