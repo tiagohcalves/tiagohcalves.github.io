@@ -242,7 +242,7 @@ chat.stream = function (prompt) {
 
   chat.body.stream = true 
   chat.body.n = 1
-  chat.body.max_tokens = 2048
+  chat.body.max_tokens = 1024
   chat.headers = { "Authorization": `Bearer ${chat("apiKey").value}`, "Content-Type": "application/json" }
   chat.result = ''
   chat.controller = new AbortController();
